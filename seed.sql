@@ -86,10 +86,10 @@ returns smallint as $$
 with author_collection_ids as (
   select collection_id
     from author_collections
-   where author_id = hasura_session ->> 'x-hasura-user-id'
+   where author_id = (hasura_session ->> 'x-hasura-user-id')::int
 )
 select case
-  when image_row.author_id = hasura_session ->> 'x-hasura-user-id'
+  when image_row.author_id = (hasura_session ->> 'x-hasura-user-id')::int
     then 1
 
   when image_row.collection_id in (select collection_id from author_collection_ids)
