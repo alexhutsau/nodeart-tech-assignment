@@ -52,3 +52,35 @@ X-Hasura-Role: admin
 }
 ```
 - [Define needed Actions](https://hasura.io/docs/2.0/actions/quickstart/)
+
+## Query examples
+
+### Find images by tags with custom author sort:
+```bash
+query MyQuery {
+  images(
+    order_by: {
+      author_sort: desc
+    },
+    where: {
+      image_tags: {
+        tag_value: {
+          _in: ["tag1","tag5"]
+        }
+      }
+    }
+  ) {
+    id
+    url
+    author_sort
+    author_id
+    collection_id
+    created_at
+    status
+    author_sort
+    image_tags {
+      tag_value
+    }
+  }
+}
+```
