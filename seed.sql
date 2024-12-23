@@ -85,7 +85,7 @@ create or replace function image_author_sort(image_row images, hasura_session js
 returns smallint as $$
 with author_collection_ids as (
   select collection_id
-    from author_collections
+    from author_collection
    where author_id = (hasura_session ->> 'x-hasura-user-id')::int
 )
 select case
