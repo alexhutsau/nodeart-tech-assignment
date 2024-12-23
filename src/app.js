@@ -2,10 +2,8 @@
 // Sample webhook showing what a hasura auth webhook looks like
 
 // init project
-const express = require('express');
-const app = express();
+const fastify = require('fastify')({ logger: true })
 const jwt = require('jsonwebtoken');
-const bodyParser = require('body-parser');
 
 const PORT = 3000;
 const JWT_SECRET = 'myjwtsecret';
@@ -31,33 +29,32 @@ function fetchUserInfo (token, cb) {
   cb();
 }
 
-app.use(bodyParser.json());
-app.get('/', (req, res) => {
+fastify.get('/', (req, res) => {
   res.send('Webhooks are running');
 });
 
-app.post('/auth', async (req, res) => {
+fastify.post('/auth', async (req, res) => {
   const { arg1 } = req.body.input;
 
   // run some business logic
 
   /*
   // In case of errors:
-  return res.status(400).json({
+  return res.code(400).send({
     message: "error happened"
   })
   */
 
   // success
-  return res.json({
+  return res.send({
     accessToken: jwt.sign(arg1, JWT_SECRET),
   });
 
 });
 
-app.get('/webhook', (request, response) => {
+fastify.get('/webhook', (req, res) => {
   // Extract token from request
-  const authorization = request.get('Authorization') || '';
+  const authorization = req.headers.authorization || '';
   const token = authorization.split(/^Bearer /)[1];
 
   // Fetch user_id that is associated with this token
@@ -72,15 +69,14 @@ app.get('/webhook', (request, response) => {
         'X-Hasura-Role': 'anonymous',
       };
     
-    response.json(hasuraVariables);
+    res.send(hasuraVariables);
   });
 });
 
-app.post('/upload', async (req, res) => {
-
-})
-
 // listen for requests :)
-const listener = app.listen(PORT, function () {
-  console.log('Your app is listening on port ' + PORT);
-});
+fastify.listen({ port: PORT }, (err) => {
+  if (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+})
