@@ -21,9 +21,9 @@ $ node src/app.js
 ```
 
 ## Hasura configuring
-- [Add **Default** data connector using **PG_DATABASE_URL** variable](https://hasura.io/docs/2.0/databases/data-connectors/adding-data-connectors/)
-- Run **seed.sql** queries
-- [Track all the foreign-keys of all tables in the database](https://hasura.io/docs/2.0/schema/postgres/using-existing-database/#to-track-all-the-foreign-keys-of-all-tables-in-the-database)
+- [Add **default** data connector using **PG_DATABASE_URL** variable](https://hasura.io/docs/2.0/databases/data-connectors/adding-data-connectors/)
+- Restart Hasura server to auto-apply migrations
+- [Track all tables and all foreign-keys in the database](https://hasura.io/docs/2.0/schema/postgres/using-existing-database/#to-track-all-the-foreign-keys-of-all-tables-in-the-database)
 - [Configuring Permission Rules](https://hasura.io/docs/2.0/auth/authorization/permissions/)
 - [Add computed field to Hasura metadata](https://hasura.io/docs/2.0/schema/postgres/computed-fields/#accessing-hasura-session-variables-in-computed-fields)
 ```bash
@@ -34,7 +34,7 @@ X-Hasura-Role: admin
 {
     "type":"pg_add_computed_field",
     "args":{
-        "source": "Default",
+        "source": "default",
         "table":{
             "name":"images",
             "schema":"public"

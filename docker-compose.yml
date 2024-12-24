@@ -10,16 +10,19 @@ services:
     environment:
       POSTGRES_PASSWORD: postgrespassword
   graphql-engine:
-    image: hasura/graphql-engine:v2.42.0
+    image: hasura/graphql-engine:v2.42.0.cli-migrations-v3
     container_name: nodeart.graphql-engine
     ports:
       - "8080:8080"
     restart: always
+    volumes:
+      - migrations:/hasura-migrations
     environment:
       ## postgres database to store Hasura metadata
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@172.17.0.1:8432/postgres
       ## this env var can be used to add the above postgres database to Hasura as a data source. this can be removed/updated based on your needs
       PG_DATABASE_URL: postgres://postgres:postgrespassword@172.17.0.1:8432/postgres
+      HASURA_GRAPHQL_MIGRATIONS_DIR: /hasura-migrations
       ## enable the console served by server
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
       ## enable debugging mode. It is recommended to disable this in production
