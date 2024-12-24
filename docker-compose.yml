@@ -16,7 +16,7 @@ services:
       - "8080:8080"
     restart: always
     volumes:
-      - migrations:/hasura-migrations
+      - ./migrations:/hasura-migrations
     environment:
       ## postgres database to store Hasura metadata
       HASURA_GRAPHQL_METADATA_DATABASE_URL: postgres://postgres:postgrespassword@172.17.0.1:8432/postgres
